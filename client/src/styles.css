@@ -23,6 +23,26 @@ body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:var(
 .btn.secondary{background:#fff;color:var(--accent);border:1px solid #e6e9ee}
 .error{color:var(--danger);margin-top:6px}
 
+/* Animations & micro-interactions */
+.btn, .btn-icon, .page-btn { transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease }
+.btn:hover, .btn-icon:hover, .page-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(15,23,42,0.12) }
+.btn:focus, .btn-icon:focus, .page-btn:focus { outline:3px solid rgba(14,165,164,0.18); outline-offset:2px }
+
+/* status badge pulse */
+.completed-indicator { position:relative }
+.completed-indicator::after { content:''; position:absolute; right:-8px; top:-6px; width:10px; height:10px; border-radius:50%; background:var(--success); box-shadow: 0 0 0 rgba(22,163,74,0.7); animation: pulse 2s infinite }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.7) } 70% { box-shadow: 0 0 0 10px rgba(22,163,74,0) } 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0) } }
+
+/* task entry animation */
+.task { animation: fadeInUp .18s ease both }
+@keyframes fadeInUp { from { opacity:0; transform: translateY(6px) } to { opacity:1; transform: translateY(0) } }
+
+/* icon spacing */
+.icon { margin-right:8px }
+
+/* accessible focus for inputs */
+.form-field input:focus { box-shadow: 0 6px 18px rgba(14,165,164,0.08); border-color: var(--accent-600) }
+
 .dashboard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .controls{display:flex;gap:8px;align-items:center}
 .search{padding:8px 10px;border-radius:8px;border:1px solid #e6e9ee;width:260px}

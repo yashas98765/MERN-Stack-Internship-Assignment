@@ -39,10 +39,10 @@ export default function Login() {
         <div className="form-field">
           <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
         </div>
-        <div style={{display:'flex',gap:8}}>
-          <button className="btn" type="submit">Login</button>
-          <Link className="btn secondary" to="/register" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}}>Register</Link>
-        </div>
+          <div style={{display:'flex',gap:8}}>
+            <button className="btn" type="submit" aria-label="Login"><i className="fa fa-right-to-bracket icon" aria-hidden="true"></i>Login</button>
+            <Link className="btn secondary" to="/register" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}} aria-label="Register">Register</Link>
+          </div>
       </form>
       {error && <p className="error">{error}</p>}
       {verifyLink && <p>Verification link (demo): <a href={verifyLink}>{verifyLink}</a></p>}

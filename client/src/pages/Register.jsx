@@ -39,8 +39,8 @@ export default function Register() {
           <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
         </div>
         <div style={{display:'flex',gap:8}}>
-          <button className="btn" type="submit">Register</button>
-          <Link className="btn secondary" to="/login" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}}>Login</Link>
+          <button className="btn" type="submit" aria-label="Register"><i className="fa fa-user-plus icon" aria-hidden="true"></i>Register</button>
+          <Link className="btn secondary" to="/login" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}} aria-label="Login">Login</Link>
         </div>
       </form>
       {error && <p className="error">{error}</p>}
