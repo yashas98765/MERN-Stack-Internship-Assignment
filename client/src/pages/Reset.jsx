@@ -9,17 +9,21 @@ export default function Reset() {
   const [token, setToken] = useState(tokenFromQuery || '')
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState('')
+  const [serverErrors, setServerErrors] = useState([])
 
   useEffect(()=>{ if (tokenFromQuery) setToken(tokenFromQuery) }, [tokenFromQuery])
 
   const submit = async (e) => {
     e.preventDefault()
     try{
+      setServerErrors([])
       await API.post('/auth/reset', { token, password })
       setMsg('Password reset successful')
       setTimeout(()=>nav('/login'),1500)
     } catch (err) {
-      setMsg(err.response?.data?.message || 'Reset failed')
+      const data = err.response?.data
+      if (data?.errors && Array.isArray(data.errors)) setServerErrors(data.errors.map(e=>e.msg||JSON.stringify(e)))
+      else setMsg(data?.message || 'Reset failed')
     }
   }
 
@@ -36,6 +40,11 @@ export default function Reset() {
         <button className="btn" type="submit">Reset Password</button>
       </form>
       {msg && <p style={{marginTop:8}}>{msg}</p>}
+      {serverErrors.length>0 && (
+        <div className="error">
+          {serverErrors.map((m,i)=>(<div key={i}>{m}</div>))}
+        </div>
+      )}
     </div>
   )
 }
