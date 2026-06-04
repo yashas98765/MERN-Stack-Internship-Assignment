@@ -16,6 +16,7 @@ export default function Register() {
     try {
       const res = await API.post('/auth/register', { name, email, password })
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
       nav('/dashboard')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed')
@@ -23,16 +24,24 @@ export default function Register() {
   }
 
   return (
-    <div className="auth">
+    <div className="auth card">
       <h2>Register</h2>
       <form onSubmit={submit}>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
-        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
-        <button type="submit">Register</button>
+        <div className="form-field">
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
+        </div>
+        <div className="form-field">
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        </div>
+        <div className="form-field">
+          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <button className="btn" type="submit">Register</button>
+          <Link className="btn secondary" to="/login" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}}>Login</Link>
+        </div>
       </form>
       {error && <p className="error">{error}</p>}
-      <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   )
 }

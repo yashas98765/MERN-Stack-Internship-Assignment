@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -10,18 +10,36 @@ const Protected = ({ children }) => {
 }
 
 export default function App() {
+  const [userName, setUserName] = useState('')
+
+  useEffect(() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'))
+      if (user?.name) setUserName(user.name)
+    } catch (e) {}
+  }, [])
+
   return (
-    <div className="app">
+    <div>
       <nav className="nav">
-        <Link to="/">Home</Link>
-        <Link to="/dashboard">Dashboard</Link>
+        <div className="container" style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <div style={{display:'flex',gap:16,alignItems:'center'}}>
+            <div className="brand">MERN Task</div>
+            <Link to="/dashboard">Dashboard</Link>
+          </div>
+          <div style={{display:'flex',gap:12,alignItems:'center'}}>
+            {userName ? <div style={{color:'#cbd5e1'}}>Hi, {userName}</div> : <Link to="/login">Login</Link>}
+          </div>
+        </div>
       </nav>
-      <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
-      </Routes>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
+        </Routes>
+      </div>
     </div>
   )
 }

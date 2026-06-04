@@ -15,6 +15,7 @@ export default function Login() {
     try {
       const res = await API.post('/auth/login', { email, password })
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
       nav('/dashboard')
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed')
@@ -22,15 +23,21 @@ export default function Login() {
   }
 
   return (
-    <div className="auth">
+    <div className="auth card">
       <h2>Login</h2>
       <form onSubmit={submit}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
-        <button type="submit">Login</button>
+        <div className="form-field">
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        </div>
+        <div className="form-field">
+          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" />
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <button className="btn" type="submit">Login</button>
+          <Link className="btn secondary" to="/register" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}}>Register</Link>
+        </div>
       </form>
       {error && <p className="error">{error}</p>}
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
     </div>
   )
 }
