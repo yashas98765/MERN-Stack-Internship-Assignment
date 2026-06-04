@@ -7,12 +7,14 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [serverErrors, setServerErrors] = useState([])
   const [verifyLink, setVerifyLink] = useState('')
   const nav = useNavigate()
 
   const submit = async (e) => {
     e.preventDefault()
     setError('')
+    setServerErrors([])
     if (!name || !email || !password) return setError('All fields required')
     try {
       const res = await API.post('/auth/register', { name, email, password })
@@ -21,7 +23,15 @@ export default function Register() {
       if (res.data.verifyLink) setVerifyLink(res.data.verifyLink)
       nav('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed')
+      const data = err.response?.data
+      if (data?.errors && Array.isArray(data.errors)) {
+        // express-validator style errors: { errors: [{ msg, param }] }
+        setServerErrors(data.errors.map(e => e.msg || JSON.stringify(e)))
+      } else if (data?.message) {
+        setError(data.message)
+      } else {
+        setError('Registration failed')
+      }
     }
   }
 
@@ -44,6 +54,13 @@ export default function Register() {
         </div>
       </form>
       {error && <p className="error">{error}</p>}
+      {serverErrors.length > 0 && (
+        <div className="error">
+          {serverErrors.map((m, i) => (
+            <div key={i}>{m}</div>
+          ))}
+        </div>
+      )}
       {verifyLink && <p>Verification link (demo): <a href={verifyLink}>{verifyLink}</a></p>}
     </div>
   )
