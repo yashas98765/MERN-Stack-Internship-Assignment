@@ -1,17 +1,30 @@
+
+
 To: hr@flextenure.com
 Subject: MERN Stack Assignment Submission – [Your Name]
 
 Dear HR Team,
 
-Please find attached my MERN Stack assignment submission.
+Please find attached my MERN Stack assignment submission for the MERN Stack Internship.
 
 Full Name: [Your Full Name]
 Contact Number: [Your Contact Number]
 College Name: [Your College Name]
 Assignment Title: MERN Task Management App
 
-Repository: [GitHub repository link]
-Or attached ZIP: [assignment.zip]
+Repository: https://github.com/yashas98765/MERN-Stack-Internship-Assignment
+Attached ZIP: See attached `mern-task.zip` (or repo link above)
+
+Screenshots: Included in the repository under `/screenshots`.
+Demo: `demo.mp4` included (or link: [demo link])
+
+Notes:
+- Client deployed (if applicable): [client URL]
+- Server deployed (if applicable): [server URL]
+
+Please let me know if you need any additional information.
 
 Best regards,
-[Your Name]
+[Your Full Name]
+
+

@@ -3,6 +3,9 @@ import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import Forgot from './pages/Forgot'
+import Reset from './pages/Reset'
+import Verify from './pages/Verify'
 
 const Protected = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -37,6 +40,9 @@ export default function App() {
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<Forgot />} />
+          <Route path="/reset" element={<Reset />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
         </Routes>
       </div>

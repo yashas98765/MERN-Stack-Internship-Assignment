@@ -6,6 +6,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [verifyLink, setVerifyLink] = useState('')
   const nav = useNavigate()
 
   const submit = async (e) => {
@@ -18,7 +19,13 @@ export default function Login() {
       localStorage.setItem('user', JSON.stringify(res.data.user))
       nav('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed')
+      const data = err.response?.data
+      if (data?.verifyLink) {
+        setError(data.message)
+        setVerifyLink(data.verifyLink)
+      } else {
+        setError(data?.message || 'Login failed')
+      }
     }
   }
 
@@ -38,6 +45,9 @@ export default function Login() {
         </div>
       </form>
       {error && <p className="error">{error}</p>}
+      {verifyLink && <p>Verification link (demo): <a href={verifyLink}>{verifyLink}</a></p>}
+      <p><Link to="/forgot">Forgot password?</Link></p>
+      <p>Don't have an account? <Link to="/register">Register</Link></p>
     </div>
   )
 }

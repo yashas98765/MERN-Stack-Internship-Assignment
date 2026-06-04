@@ -7,6 +7,7 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [verifyLink, setVerifyLink] = useState('')
   const nav = useNavigate()
 
   const submit = async (e) => {
@@ -17,6 +18,7 @@ export default function Register() {
       const res = await API.post('/auth/register', { name, email, password })
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('user', JSON.stringify(res.data.user))
+      if (res.data.verifyLink) setVerifyLink(res.data.verifyLink)
       nav('/dashboard')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed')
@@ -42,6 +44,7 @@ export default function Register() {
         </div>
       </form>
       {error && <p className="error">{error}</p>}
+      {verifyLink && <p>Verification link (demo): <a href={verifyLink}>{verifyLink}</a></p>}
     </div>
   )
 }
