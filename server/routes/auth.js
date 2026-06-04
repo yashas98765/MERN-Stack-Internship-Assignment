@@ -22,15 +22,12 @@ router.post(
 
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(password, salt);
-      user = new User({ name, email, password: hashed, isVerified: false });
+      user = new User({ name, email, password: hashed });
       await user.save();
 
-      // create verification token
-      const payload = { user: { id: user.id }, type: 'verify' };
+      const payload = { user: { id: user.id } };
       const token = jwt.sign(payload, process.env.JWT_SECRET || 'devsecret', { expiresIn: '7d' });
-      const verifyLink = `${CLIENT_URL}/verify?token=${token}`;
-
-      res.json({ token, verifyLink, user: { id: user.id, name: user.name, email: user.email } });
+      res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -45,13 +42,6 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-    if (!user.isVerified) {
-      // send a verification token in response for demo purposes
-      const payload = { user: { id: user.id }, type: 'verify' };
-      const token = jwt.sign(payload, process.env.JWT_SECRET || 'devsecret', { expiresIn: '7d' });
-      const verifyLink = `${CLIENT_URL}/verify?token=${token}`;
-      return res.status(403).json({ message: 'Email not verified', verifyLink });
-    }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
@@ -64,23 +54,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Verify email
-router.post('/verify', async (req, res) => {
-  const { token } = req.body;
-  if (!token) return res.status(400).json({ message: 'Token required' });
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'devsecret');
-    if (decoded.type !== 'verify') return res.status(400).json({ message: 'Invalid token' });
-    const user = await User.findById(decoded.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    user.isVerified = true;
-    await user.save();
-    res.json({ message: 'Email verified' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(400).json({ message: 'Invalid or expired token' });
-  }
-});
+// (Email verification removed)
 
 // Forgot password - generate reset token
 router.post('/forgot', [body('email').isEmail()], async (req, res) => {
