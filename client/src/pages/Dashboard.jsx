@@ -73,10 +73,14 @@ export default function Dashboard() {
 
   const onDelete = async (id) => {
     if (!confirm('Delete this task?')) return
-    await API.delete(`/tasks/${id}`)
-    setMessage('Task deleted')
-    fetchTasks()
-    setTimeout(()=>setMessage(''),2500)
+    try {
+      await API.delete(`/tasks/${id}`)
+      setMessage('Task deleted')
+      fetchTasks()
+      setTimeout(()=>setMessage(''),2500)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Delete failed')
+    }
   }
 
   const onToggle = async (id) => {
